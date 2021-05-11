@@ -195,6 +195,10 @@ async function updateCommand(
   args: string[],
   guildId: string,
 ): Promise<undefined | void> {
+  const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
+  const randomCommand = getRandom(commands);
+  const updatingCommand = commands.find((cmd) => cmd.input === args[0]);
+
   if (defaultCommands.find((cmdName) => cmdName === args[0])) {
     msg.channel.send(
       embed('#ff0000', [
@@ -204,14 +208,7 @@ async function updateCommand(
         },
       ]),
     );
-    return;
-  }
-
-  const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
-  const randomCommand = getRandom(commands);
-  const updatingCommand = commands.find((cmd) => cmd.input === args[0]);
-
-  if (args.length < 2) {
+  } else if (args.length < 2) {
     msg.channel.send(
       embed('#ff0000', [
         {
@@ -250,7 +247,7 @@ async function updateCommand(
     const newCommand = {
       author: msg.author,
       input: args[0],
-      output: args.slice(1).join(' ').trim(),
+      output: args.slice(1).join(' '),
     };
 
     await guildCtrl.updateCommand(newCommand, guildId);
