@@ -1,4 +1,4 @@
-import { MessageEmbed, User } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 
 interface Field {
   name: string;
