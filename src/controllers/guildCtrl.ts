@@ -111,7 +111,7 @@ export class GuildCtrl implements GuildCtrlProtocol {
         { useFindAndModify: false },
       );
 
-      return guild.commands; // previous commands
+      return newCommands;
     } catch (e) {
       console.log(e.message, 'in GuildCtrl.removeCommand');
       return null;

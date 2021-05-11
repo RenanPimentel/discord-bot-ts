@@ -135,14 +135,10 @@ async function removeCommand(
   args: string[],
   guildId: string,
 ): Promise<void> {
-  const commands = (await guildCtrl.removeCommand(
-    args[0],
-    guildId,
-  )) as CommandProtocol[];
+  const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
 
   const toBeRemovedCommand = commands.find((cmd) => cmd.input === args[0]);
-  console.log(toBeRemovedCommand);
-  if (toBeRemovedCommand) console.log(IsAdmOrAuthor(msg, toBeRemovedCommand));
+
   if (
     args.length === 0 ||
     defaultCommands.find((cmd) => cmd === args[0]) ||
@@ -157,6 +153,7 @@ async function removeCommand(
       ]),
     );
   } else {
+    guildCtrl.removeCommand(args[0], guildId);
     msg.channel.send(
       embed(getRandomColor(), [
         {
