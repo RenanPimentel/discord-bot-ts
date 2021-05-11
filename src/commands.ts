@@ -16,21 +16,21 @@ declare global {
   }
 }
 
-// Array.prototype.flat = function flat(num: number | undefined) {
-//   if (num) num = undefined;
+Array.prototype.flat = function flat(num: number | undefined) {
+  if (num) num = undefined;
 
-//   const stack = [...this];
-//   const res = [];
-//   while (stack.length) {
-//     const next = stack.pop();
-//     if (Array.isArray(next)) {
-//       stack.push(...next);
-//     } else {
-//       res.push(next);
-//     }
-//   }
-//   return res.reverse();
-// };
+  const stack = [...this];
+  const res = [];
+  while (stack.length) {
+    const next = stack.pop();
+    if (Array.isArray(next)) {
+      stack.push(...next);
+    } else {
+      res.push(next);
+    }
+  }
+  return res.reverse();
+};
 
 const IsAdmOrAuthor = (msg: Message, command: CommandProtocol) => {
   return (
