@@ -3,12 +3,6 @@ import { MessageEmbed } from 'discord.js';
 const urlRegex =
   /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
-// declare global {
-//   interface Array<T> {
-//     getRandom(): T;
-//   }
-// }
-
 function getRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -31,15 +25,12 @@ interface Field {
 
 function embed(color: string, fields: Field[]): MessageEmbed {
   const embed = new MessageEmbed().setColor(color).setTimestamp(Date.now());
-  fields = Array.from(fields);
-  console.log(fields);
-  console.log(fields.flat);
-  console.log(fields.reduce);
-  embed.addFields(...fields);
-  fields.forEach(({ name }) => {
+
+  fields.forEach(({ name, value }) => {
     if (name.match(urlRegex)) {
       embed.setImage(name);
     }
+    embed.addField(name, value);
   });
 
   return embed;

@@ -129,7 +129,6 @@ const removeCommand = async (
     );
   } else {
     guildCtrl.removeCommand(args[0], guildId);
-
     msg.channel.send(
       embed(getRandomColor(), [
         {
@@ -153,14 +152,14 @@ const sendCommand = async (
   command
     ? msg.channel.send(
         embed(getRandomColor(), [
-          { name: command.output, value: msg.author.id },
+          { name: command.output, value: msg.author.toString() },
         ]),
       )
     : msg.channel.send(
         embed('#ff0000', [
           {
             name: 'Não tenho esse comando nesse servidor!',
-            value: msg.author.id,
+            value: msg.author.toString(),
           },
         ]),
       );
