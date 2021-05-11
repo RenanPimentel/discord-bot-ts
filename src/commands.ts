@@ -209,9 +209,7 @@ async function updateCommand(
 
   const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
   const randomCommand = getRandom(commands);
-  const updatingCommand = commands.find(
-    (cmd) => cmd.input === args[0],
-  ) as CommandProtocol;
+  const updatingCommand = commands.find((cmd) => cmd.input === args[0]);
 
   if (args.length < 2) {
     msg.channel.send(
@@ -230,10 +228,7 @@ async function updateCommand(
         { name: `${prefix}dia`, value: `'bom dia!'` },
       ]),
     );
-    return;
-  }
-
-  if (!(await guildCtrl.hasCommand(args[0], guildId))) {
+  } else if (!(await guildCtrl.hasCommand(args[0], guildId))) {
     msg.channel.send(
       embed('#ff0000', [
         {
@@ -242,16 +237,7 @@ async function updateCommand(
         },
       ]),
     );
-    return;
-  }
-
-  const newCommand = {
-    author: msg.author,
-    input: args[0],
-    output: args.slice(1).join(' '),
-  };
-
-  if (!IsAdmOrAuthor(msg, updatingCommand)) {
+  } else if (!IsAdmOrAuthor(msg, updatingCommand)) {
     msg.channel.send(
       embed('#ff0000', [
         {
@@ -260,18 +246,23 @@ async function updateCommand(
         },
       ]),
     );
-    return;
-  }
+  } else {
+    const newCommand = {
+      author: msg.author,
+      input: args[0],
+      output: args.slice(1).join(' ').trim(),
+    };
 
-  await guildCtrl.updateCommand(newCommand, guildId);
-  msg.channel.send(
-    embed('#00ff00', [
-      {
-        name: 'Comando atualizado com exito!',
-        value: `Digite ${prefix}${args[0]}`,
-      },
-    ]),
-  );
+    await guildCtrl.updateCommand(newCommand, guildId);
+    msg.channel.send(
+      embed('#00ff00', [
+        {
+          name: 'Comando atualizado com exito!',
+          value: `Digite ${prefix}${args[0]}`,
+        },
+      ]),
+    );
+  }
 }
 
 export default {

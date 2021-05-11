@@ -37,7 +37,11 @@ client.on('message', async (msg) => {
   if (msg.channel.type !== 'text') return;
   if (!msg.content.startsWith(prefix)) return;
 
-  const [cmdName, ...args] = msg.content.slice(prefix.length).split(' ');
+  const [cmdName, ...args] = msg.content
+    .slice(prefix.length)
+    .split(' ')
+    .map((arg) => arg.trim());
+
   const guildId = msg.guild.id;
 
   if (cmdName === 'add') {
