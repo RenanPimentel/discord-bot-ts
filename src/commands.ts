@@ -89,7 +89,7 @@ async function createCommand(
         },
         {
           name: 'Seus comandos',
-          value: commands.map((cmd) => cmd.input).join(', ') || 'nenhum',
+          value: commands.map((cmd) => cmd.input).join(', ') || ':(',
         },
       ]),
     );
