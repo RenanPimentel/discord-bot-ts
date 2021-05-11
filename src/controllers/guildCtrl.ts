@@ -52,8 +52,8 @@ export class GuildCtrl implements GuildCtrlProtocol {
     try {
       const guild = (await this.getGuild(guildId)) as GuildProtocol;
       if (!guild) {
-        const guildAdded = await this.addGuild(guildId);
-        return guildAdded && guildAdded.commands;
+        this.addGuild(guildId);
+        return [];
       }
       return guild.commands;
     } catch (e) {
@@ -67,7 +67,8 @@ export class GuildCtrl implements GuildCtrlProtocol {
     guildId: string,
   ): Promise<CommandProtocol[] | null> {
     try {
-      const newCommands = await this.getCommands(guildId);
+      const guild = (await this.getGuild(guildId)) as GuildProtocol;
+      const newCommands = [...guild.commands];
 
       if (!newCommands) return null;
 
@@ -76,12 +77,13 @@ export class GuildCtrl implements GuildCtrlProtocol {
       if (index === -1) return null;
 
       newCommands[index].output = command.output;
-      console.log({ newCommands });
+
       Guild.findOneAndUpdate(
         { id: guildId },
         { commands: [...newCommands] },
         { useFindAndModify: false },
       );
+
       console.log({ newCommands });
       return newCommands;
     } catch (e) {
