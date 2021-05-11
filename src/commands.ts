@@ -1,9 +1,8 @@
 import { Message } from 'discord.js';
 import { GuildCtrl } from './controllers/guildCtrl';
 import { CommandProtocol } from './models/Guild';
-import utils from './utils';
+import { embed, getRandomColor, getRandom, embedImage } from './utils';
 import environment from './config/endpoints.config';
-const { embed, getRandomColor, getRandom } = utils;
 
 const guildCtrl = new GuildCtrl();
 
@@ -174,20 +173,26 @@ async function sendCommand(
   const command = commands.find(
     (cmd: CommandProtocol) => cmd.input === cmdName,
   );
-  command
-    ? msg.channel.send(
+  if (command) {
+    if (command.output.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)) {
+      msg.channel.send(embedImage(command.output, command.author));
+    } else {
+      msg.channel.send(
         embed(getRandomColor(), [
           { name: command.output, value: msg.author.toString() },
         ]),
-      )
-    : msg.channel.send(
-        embed('#ff0000', [
-          {
-            name: 'Não tenho esse comando nesse servidor!',
-            value: msg.author.toString(),
-          },
-        ]),
       );
+    }
+  } else {
+    msg.channel.send(
+      embed('#ff0000', [
+        {
+          name: 'Não tenho esse comando nesse servidor!',
+          value: msg.author.toString(),
+        },
+      ]),
+    );
+  }
 }
 
 async function updateCommand(
