@@ -33,10 +33,10 @@ Array.prototype.flat = function flat(num: number | undefined) {
 };
 
 function IsAdmOrAuthor(msg: Message, command: CommandProtocol) {
-  return (
-    (msg.member && msg.member.hasPermission('ADMINISTRATOR')) ||
-    msg.author.id === command.author.id
-  );
+  let isAdmin = false;
+  if (msg.member) isAdmin = msg.member.hasPermission('ADMINISTRATOR');
+
+  return isAdmin || msg.author.id === command.author.id;
 }
 
 async function createCommand(
