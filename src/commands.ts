@@ -1,8 +1,10 @@
 import { Message } from 'discord.js';
 import { GuildCtrl } from './controllers/guildCtrl';
 import { CommandProtocol } from './models/Guild';
-import { embed, getRandomColor, getRandom, embedImage } from './utils';
+import utils from './utils';
 import environment from './config/endpoints.config';
+
+const { embed, getRandomColor, getRandom, embedImage } = utils;
 
 const guildCtrl = new GuildCtrl();
 

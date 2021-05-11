@@ -39,4 +39,4 @@ function embed(color: string, fields: Field[]): MessageEmbed {
   return embed;
 }
 
-export { embed, getRandomColor, getRandom, embedImage };
+export default { embed, getRandomColor, getRandom, embedImage };
