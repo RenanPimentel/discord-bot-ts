@@ -27,7 +27,7 @@ function embedImage(
 ): MessageEmbed {
   if (url.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)) {
     prevEmbed.setImage(url);
-    prevEmbed.setFooter(user.username);
+    prevEmbed.setAuthor(user.username);
   }
 
   return prevEmbed;
