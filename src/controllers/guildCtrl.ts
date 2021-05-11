@@ -71,20 +71,18 @@ export class GuildCtrl implements GuildCtrlProtocol {
 
       if (!newCommands) return null;
 
-      const index = newCommands.findIndex(
-        (cmd: CommandProtocol) => cmd.input === command.input,
-      );
+      const index = newCommands.findIndex((cmd) => cmd.input === command.input);
 
-      if (!index || !newCommands) return null;
+      if (index === -1 || !newCommands) return null;
 
       newCommands[index].output = command.output;
-      const updatedGuild = (await Guild.findOneAndUpdate(
+      Guild.findOneAndUpdate(
         { id: guildId },
         { commands: [...newCommands] },
         { useFindAndModify: false },
-      )) as GuildProtocol;
+      );
 
-      return updatedGuild.commands;
+      return newCommands;
     } catch (e) {
       console.log(e.message, 'in GuildCtrl.updateCommand');
       return null;

@@ -32,7 +32,8 @@ Array.prototype.flat = function flat(num: number | undefined) {
   return res.reverse();
 };
 
-function IsAdmOrAuthor(msg: Message, command: CommandProtocol) {
+function IsAdmOrAuthor(msg: Message, command: CommandProtocol | undefined) {
+  if (!command) return false;
   let isAdmin = false;
   if (msg.member) isAdmin = msg.member.hasPermission('ADMINISTRATOR');
   return isAdmin || msg.author.id === command.author.id;
@@ -141,7 +142,7 @@ async function removeCommand(
   if (
     args.length === 0 ||
     defaultCommands.find((cmd) => cmd === args[0]) ||
-    (toBeRemovedCommand && !IsAdmOrAuthor(msg, toBeRemovedCommand))
+    !IsAdmOrAuthor(msg, toBeRemovedCommand)
   ) {
     msg.channel.send(
       embed('#ff0000', [
@@ -236,7 +237,7 @@ async function updateCommand(
     msg.channel.send(
       embed('#ff0000', [
         {
-          name: `Esse comando não existe ou voce não pode altera-lo`,
+          name: `Esse comando não existe`,
           value: `impossível atualizar '${prefix}${args[0]}'`,
         },
       ]),
