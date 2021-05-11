@@ -32,18 +32,18 @@ Array.prototype.flat = function flat(num: number | undefined) {
   return res.reverse();
 };
 
-const IsAdmOrAuthor = (msg: Message, command: CommandProtocol) => {
+function IsAdmOrAuthor(msg: Message, command: CommandProtocol) {
   return (
     (msg.member && msg.member.hasPermission('ADMINISTRATOR')) ||
     msg.author.id === command.author.id
   );
-};
+}
 
-const createCommand = async (
+async function createCommand(
   msg: Message,
   args: string[],
   guildId: string,
-): Promise<undefined> => {
+): Promise<undefined> {
   if (args.length < 2) {
     msg.channel.send(
       embed('#ff0000', [
@@ -106,7 +106,7 @@ const createCommand = async (
       ]),
     );
   }
-};
+}
 
 async function sendHelpMessage(msg: Message, guildId: string): Promise<void> {
   const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
@@ -131,11 +131,11 @@ async function sendHelpMessage(msg: Message, guildId: string): Promise<void> {
   );
 }
 
-const removeCommand = async (
+async function removeCommand(
   msg: Message,
   args: string[],
   guildId: string,
-): Promise<void> => {
+): Promise<void> {
   if (
     args.length === 0 ||
     defaultCommands.find((cmd) => cmd === args[0]) ||
@@ -160,13 +160,13 @@ const removeCommand = async (
       ]),
     );
   }
-};
+}
 
-const sendCommand = async (
+async function sendCommand(
   msg: Message,
   cmdName: string,
   guildId: string,
-): Promise<void> => {
+): Promise<void> {
   const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
   const command = commands.find(
     (cmd: CommandProtocol) => cmd.input === cmdName,
@@ -185,13 +185,13 @@ const sendCommand = async (
           },
         ]),
       );
-};
+}
 
-const updateCommand = async (
+async function updateCommand(
   msg: Message,
   args: string[],
   guildId: string,
-): Promise<undefined | void> => {
+): Promise<undefined | void> {
   if (defaultCommands.find((cmdName) => cmdName === args[0])) {
     msg.channel.send(
       embed('#ff0000', [
@@ -204,6 +204,8 @@ const updateCommand = async (
     return;
   }
 
+  const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
+  const randomCommand = getRandom(commands);
   if (args.length < 2) {
     msg.channel.send(
       embed('#ff0000', [
@@ -211,7 +213,13 @@ const updateCommand = async (
           name: `Digite ${prefix}update <input> <output> para atualizar um comando`,
           value: 'exemplo',
         },
-        { name: `${prefix}update dia bom dia!`, value: 'vira a' },
+        {
+          name:
+            commands.length > 0
+              ? `${prefix}update ${randomCommand.input} bom dia!`
+              : '!add <input> <output> para adicionar um comando',
+          value: 'vira',
+        },
         { name: `${prefix}dia`, value: `'bom dia!'` },
       ]),
     );
@@ -257,7 +265,7 @@ const updateCommand = async (
       },
     ]),
   );
-};
+}
 
 export default {
   createCommand,
