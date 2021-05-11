@@ -35,7 +35,6 @@ Array.prototype.flat = function flat(num: number | undefined) {
 function IsAdmOrAuthor(msg: Message, command: CommandProtocol) {
   let isAdmin = false;
   if (msg.member) isAdmin = msg.member.hasPermission('ADMINISTRATOR');
-
   return isAdmin || msg.author.id === command.author.id;
 }
 
@@ -136,10 +135,17 @@ async function removeCommand(
   args: string[],
   guildId: string,
 ): Promise<void> {
+  const commands = (await guildCtrl.removeCommand(
+    args[0],
+    guildId,
+  )) as CommandProtocol[];
+
+  const toBeRemovedCommand = commands.find((cmd) => cmd.input === args[0]);
+
   if (
     args.length === 0 ||
     defaultCommands.find((cmd) => cmd === args[0]) ||
-    !IsAdmOrAuthor(msg, { author: msg.author, input: '', output: '' })
+    (toBeRemovedCommand && !IsAdmOrAuthor(msg, toBeRemovedCommand))
   ) {
     msg.channel.send(
       embed('#ff0000', [
@@ -150,7 +156,6 @@ async function removeCommand(
       ]),
     );
   } else {
-    guildCtrl.removeCommand(args[0], guildId);
     msg.channel.send(
       embed(getRandomColor(), [
         {
