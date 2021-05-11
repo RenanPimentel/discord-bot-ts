@@ -67,28 +67,10 @@ export class GuildCtrl implements GuildCtrlProtocol {
     guildId: string,
   ): Promise<CommandProtocol[] | null> {
     try {
-      // const newCommands = (await this.getCommands(
-      //   guildId,
-      // )) as CommandProtocol[];
-
-      // if (!newCommands) return null;
-
-      // const index = newCommands.findIndex((cmd) => cmd.input === command.input);
-
-      // if (index === -1) return null;
-
-      // newCommands[index].output = command.output;
-
-      // Guild.findOneAndUpdate(
-      //   { id: guildId },
-      //   { commands: [...newCommands] },
-      //   { useFindAndModify: false },
-      // );
-
-      // console.log({ newCommands });
       const commands = (await this.getCommands(guildId)) as CommandProtocol[];
       if (commands.find((cmd) => cmd.input === command.input)) {
-        this.removeCommand(command.input, guildId);
+        const newCommands = await this.removeCommand(command.input, guildId);
+        console.log(newCommands);
         return await this.rawAddCommand(command, guildId);
       } else {
         return null;
