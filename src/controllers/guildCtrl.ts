@@ -67,8 +67,9 @@ export class GuildCtrl implements GuildCtrlProtocol {
     guildId: string,
   ): Promise<CommandProtocol[] | null> {
     try {
-      const guild = (await this.getGuild(guildId)) as GuildProtocol;
-      const newCommands = [...guild.commands];
+      const newCommands = (await this.getCommands(
+        guildId,
+      )) as CommandProtocol[];
 
       if (!newCommands) return null;
 
@@ -97,8 +98,9 @@ export class GuildCtrl implements GuildCtrlProtocol {
     guildId: string,
   ): Promise<CommandProtocol[] | null> {
     try {
-      const guild = (await this.getGuild(guildId)) as GuildProtocol;
-      const newCommands = [...guild.commands];
+      const newCommands = (await this.getCommands(
+        guildId,
+      )) as CommandProtocol[];
 
       const index = newCommands.findIndex(
         (cmd: CommandProtocol) => cmd.input == input,
