@@ -28,7 +28,7 @@ function embed(color: string, fields: Field[]): MessageEmbed {
   fields.forEach(({ name, value }) => {
     if (name.match(isImageRegex)) {
       embed.setImage(name);
-      embed.setFooter(value);
+      embed.setAuthor(value);
     } else {
       embed.addField(name, value);
     }
