@@ -141,7 +141,8 @@ async function removeCommand(
   )) as CommandProtocol[];
 
   const toBeRemovedCommand = commands.find((cmd) => cmd.input === args[0]);
-
+  console.log(toBeRemovedCommand);
+  if (toBeRemovedCommand) console.log(IsAdmOrAuthor(msg, toBeRemovedCommand));
   if (
     args.length === 0 ||
     defaultCommands.find((cmd) => cmd === args[0]) ||
