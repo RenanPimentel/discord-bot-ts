@@ -177,7 +177,7 @@ async function sendCommand(
   );
   if (command) {
     if (command.output.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)) {
-      msg.channel.send(embedImage(command.output, command.author));
+      msg.channel.send(embedImage(command.output));
     } else {
       msg.channel.send(
         embed(getRandomColor(), [

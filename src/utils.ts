@@ -22,15 +22,13 @@ function getRandomColor(): string {
 
 function embedImage(
   url: string,
-  user: User,
-  prevEmbed: MessageEmbed = new MessageEmbed(),
+  embed: MessageEmbed = new MessageEmbed(),
 ): MessageEmbed {
   if (url.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)) {
-    prevEmbed.setImage(url);
-    prevEmbed.setAuthor(user.username);
+    embed.setThumbnail(url).setColor(getRandomColor());
   }
 
-  return prevEmbed;
+  return embed;
 }
 
 function embed(color: string, fields: Field[]): MessageEmbed {
