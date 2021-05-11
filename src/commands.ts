@@ -136,7 +136,6 @@ async function removeCommand(
   guildId: string,
 ): Promise<void> {
   const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
-
   const toBeRemovedCommand = commands.find((cmd) => cmd.input === args[0]);
 
   if (
@@ -209,6 +208,10 @@ async function updateCommand(
 
   const commands = (await guildCtrl.getCommands(guildId)) as CommandProtocol[];
   const randomCommand = getRandom(commands);
+  const updatingCommand = commands.find(
+    (cmd) => cmd.input === args[0],
+  ) as CommandProtocol;
+
   if (args.length < 2) {
     msg.channel.send(
       embed('#ff0000', [
@@ -233,7 +236,7 @@ async function updateCommand(
     msg.channel.send(
       embed('#ff0000', [
         {
-          name: `Esse comando não existe`,
+          name: `Esse comando não existe ou voce não pode altera-lo`,
           value: `impossível atualizar '${prefix}${args[0]}'`,
         },
       ]),
@@ -241,13 +244,13 @@ async function updateCommand(
     return;
   }
 
-  const command = {
+  const newCommand = {
     author: msg.author,
     input: args[0],
     output: args.slice(1).join(' '),
   };
 
-  if (!IsAdmOrAuthor(msg, command)) {
+  if (!IsAdmOrAuthor(msg, updatingCommand)) {
     msg.channel.send(
       embed('#ff0000', [
         {
@@ -259,7 +262,7 @@ async function updateCommand(
     return;
   }
 
-  await guildCtrl.updateCommand(command, guildId);
+  await guildCtrl.updateCommand(newCommand, guildId);
   msg.channel.send(
     embed('#00ff00', [
       {
