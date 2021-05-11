@@ -23,7 +23,6 @@ interface GuildCtrlProtocol {
 export class GuildCtrl implements GuildCtrlProtocol {
   async getGuild(guildId: string): Promise<GuildProtocol | null> {
     try {
-      console.log(await Guild.findOne({ id: guildId }));
       return Guild.findOne({ id: guildId });
     } catch (e) {
       console.log(e.message, 'in GuildCtrl.getGuild');
@@ -52,7 +51,6 @@ export class GuildCtrl implements GuildCtrlProtocol {
   async getCommands(guildId: string): Promise<CommandProtocol[] | null> {
     try {
       const guild = (await this.getGuild(guildId)) as GuildProtocol;
-      console.log({ guild });
       if (!guild) {
         const guildAdded = await this.addGuild(guildId);
         return guildAdded && guildAdded.commands;

@@ -1,8 +1,10 @@
 import { Client } from 'discord.js';
 import connectDB from './config/db';
 import commands from './commands';
+import utils from './utils';
 import environment from './config/endpoints.config';
 
+const { getRandom } = utils;
 const {
   createCommand,
   removeCommand,
@@ -24,7 +26,7 @@ client.once('ready', () => {
   setInterval(() => {
     if (client.user)
       client.user.setActivity({
-        name: activities.getRandom(),
+        name: getRandom(activities),
         type: 'PLAYING',
       });
   }, 1000 * 60);

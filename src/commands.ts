@@ -3,7 +3,7 @@ import { GuildCtrl } from './controllers/guildCtrl';
 import { CommandProtocol } from './models/Guild';
 import utils from './utils';
 import environment from './config/endpoints.config';
-const { embed, getRandomColor } = utils;
+const { embed, getRandomColor, getRandom } = utils;
 
 const guildCtrl = new GuildCtrl();
 
@@ -104,7 +104,7 @@ async function sendHelpMessage(msg: Message, guildId: string): Promise<void> {
           { name: 'Comandos embutidos', value: defaultCommands.join(', ') },
           { name: 'Comandos criados', value: inputs.join(', ') },
           { name: 'Prefixo', value: prefix },
-          { name: 'Exemplo', value: prefix + inputs.getRandom() },
+          { name: 'Exemplo', value: prefix + getRandom(inputs) },
         ]),
   );
 }
