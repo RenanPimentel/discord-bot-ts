@@ -88,6 +88,7 @@ export class GuildCtrl implements GuildCtrlProtocol {
       // console.log({ newCommands });
       const commands = (await this.getCommands(guildId)) as CommandProtocol[];
       if (commands.find((cmd) => cmd.input === command.input)) {
+        this.removeCommand(command.input, guildId);
         return await this.rawAddCommand(command, guildId);
       } else {
         return null;
