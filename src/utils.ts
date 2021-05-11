@@ -1,13 +1,17 @@
 import { MessageEmbed } from 'discord.js';
 
-const urlRegex =
-  /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+interface Field {
+  name: string;
+  value: string;
+}
+
+const isImageRegex = /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i;
 
 function getRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-const getRandomColor = (): string => {
+function getRandomColor(): string {
   const hexValues = '0123456789ABCDEF'.split('');
   let color = '#';
 
@@ -16,26 +20,21 @@ const getRandomColor = (): string => {
   }
 
   return color;
-};
-
-interface Field {
-  name: string;
-  value: string;
 }
 
 function embed(color: string, fields: Field[]): MessageEmbed {
   const embed = new MessageEmbed().setColor(color).setTimestamp(Date.now());
 
   fields.forEach(({ name, value }) => {
-    if (name.match(urlRegex)) {
+    if (name.match(isImageRegex)) {
       embed.setImage(name);
+      embed.setFooter(value);
+    } else {
+      embed.addField(name, value);
     }
-    embed.addField(name, value);
   });
 
   return embed;
-
-  //  return fields.map(({ name, value }) => `${name}: ${value}`).join('\n');
 }
 
 export default { embed, getRandomColor, getRandom };
