@@ -10,6 +10,28 @@ const guildCtrl = new GuildCtrl();
 const prefix = environment.prefix || '!';
 const defaultCommands = ['add', 'remove', 'update', 'help'];
 
+declare global {
+  interface Array<T> {
+    flat(num: number | undefined): Array<T>;
+  }
+}
+
+// Array.prototype.flat = function flat(num: number | undefined) {
+//   if (num) num = undefined;
+
+//   const stack = [...this];
+//   const res = [];
+//   while (stack.length) {
+//     const next = stack.pop();
+//     if (Array.isArray(next)) {
+//       stack.push(...next);
+//     } else {
+//       res.push(next);
+//     }
+//   }
+//   return res.reverse();
+// };
+
 const IsAdmOrAuthor = (msg: Message, command: CommandProtocol) => {
   return (
     (msg.member && msg.member.hasPermission('ADMINISTRATOR')) ||
