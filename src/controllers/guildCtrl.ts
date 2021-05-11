@@ -67,26 +67,27 @@ export class GuildCtrl implements GuildCtrlProtocol {
     guildId: string,
   ): Promise<CommandProtocol[] | null> {
     try {
-      const newCommands = (await this.getCommands(
-        guildId,
-      )) as CommandProtocol[];
+      // const newCommands = (await this.getCommands(
+      //   guildId,
+      // )) as CommandProtocol[];
 
-      if (!newCommands) return null;
+      // if (!newCommands) return null;
 
-      const index = newCommands.findIndex((cmd) => cmd.input === command.input);
+      // const index = newCommands.findIndex((cmd) => cmd.input === command.input);
 
-      if (index === -1) return null;
+      // if (index === -1) return null;
 
-      newCommands[index].output = command.output;
+      // newCommands[index].output = command.output;
 
-      Guild.findOneAndUpdate(
-        { id: guildId },
-        { commands: [...newCommands] },
-        { useFindAndModify: false },
-      );
+      // Guild.findOneAndUpdate(
+      //   { id: guildId },
+      //   { commands: [...newCommands] },
+      //   { useFindAndModify: false },
+      // );
 
-      console.log({ newCommands });
-      return newCommands;
+      // console.log({ newCommands });
+
+      return await this.rawAddCommand(command, guildId);
     } catch (e) {
       console.log(e.message, 'in GuildCtrl.updateCommand');
       return null;
@@ -133,15 +134,12 @@ export class GuildCtrl implements GuildCtrlProtocol {
     }
   }
 
-  async addCommand(
+  async rawAddCommand(
     command: CommandProtocol,
     guildId: string,
   ): Promise<CommandProtocol[] | null> {
     try {
       const commands = (await this.getCommands(guildId)) as CommandProtocol[];
-
-      if (await this.hasCommand(command.input, guildId)) return null;
-
       const updatedGuild = (await Guild.findOneAndUpdate(
         { id: guildId },
         { commands: [...commands, command] },
@@ -149,6 +147,19 @@ export class GuildCtrl implements GuildCtrlProtocol {
       )) as GuildProtocol;
 
       return updatedGuild.commands;
+    } catch (e) {
+      console.log(e.message, 'in GuildCtrl.rawAddCommand');
+      return null;
+    }
+  }
+
+  async addCommand(
+    command: CommandProtocol,
+    guildId: string,
+  ): Promise<CommandProtocol[] | null> {
+    try {
+      if (await this.hasCommand(command.input, guildId)) return null;
+      return await this.rawAddCommand(command, guildId);
     } catch (e) {
       console.log(e.message, 'in GuildCtrl.addCommand');
       return null;
