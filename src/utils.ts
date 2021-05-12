@@ -25,7 +25,7 @@ function embedImage(
   embed: MessageEmbed = new MessageEmbed(),
 ): MessageEmbed {
   if (url.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i)) {
-    embed.setThumbnail(url).setColor(getRandomColor());
+    embed.setImage(url).setColor(getRandomColor());
   }
 
   return embed;
